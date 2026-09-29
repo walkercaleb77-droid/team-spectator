@@ -1,0 +1,7 @@
+[
+  { "jersey": 12, "name": "Marcus Tillman", "heightIn": 74, "weightLb": 195, "position": "QB" },
+  { "jersey": 7, "name": "Devin Okafor", "heightIn": 71, "weightLb": 180, "position": "WR" },
+  { "jersey": 23, "name": "Jalen Brooks", "heightIn": 70, "weightLb": 190, "position": "RB" },
+  { "jersey": 55, "name": "Tyler Henriksen", "heightIn": 75, "weightLb": 265, "position": "OL" },
+  { "jersey": 1, "name": "Cole Ramirez", "heightIn": 72, "weightLb": 175, "position": "DB" }
+]
