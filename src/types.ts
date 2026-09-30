@@ -13,5 +13,19 @@ export interface Player {
   positions: Position[]
 }
 
+/** Shape of public/roster.json */
+export interface Roster {
+  varsityJv: Player[]
+  /** Empty when no freshman roster has been provided */
+  freshman: Player[]
+}
+
+export type Squad = keyof Roster
+
+export const SQUAD_LABELS: Record<Squad, string> = {
+  varsityJv: 'Varsity / JV',
+  freshman: 'Freshman',
+}
+
 export type SortKey = 'jersey' | 'name' | 'position' | 'height' | 'weight'
 export type SortDirection = 'asc' | 'desc'

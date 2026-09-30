@@ -70,15 +70,21 @@ body {
   min-height: 100svh;
 }
 
+/* Brand scrolls away; the controls below it stay pinned so they don't eat the screen */
 .app-header {
+  padding: calc(env(safe-area-inset-top, 0px) + 1rem) 1rem 0.75rem;
+  background: var(--header-bg);
+  color: var(--header-text);
+}
+
+.controls {
   position: sticky;
   top: 0;
   z-index: 1;
   display: grid;
   gap: 0.75rem;
-  padding: calc(env(safe-area-inset-top, 0px) + 1rem) 1rem 1rem;
+  padding: calc(env(safe-area-inset-top, 0px) + 0.25rem) 1rem 1rem;
   background: var(--header-bg);
-  color: var(--header-text);
   /* black-and-white stripe, like a jersey sleeve */
   border-bottom: 4px solid var(--wildcat-black);
   box-shadow: inset 0 -3px 0 var(--wildcat-white);
@@ -137,6 +143,41 @@ h1 {
 
 main {
   padding: 0.75rem 1rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
+}
+
+/* ---------- Squad toggle (Varsity/JV vs Freshman) ---------- */
+
+.squad-toggle {
+  display: flex;
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.squad-button {
+  flex: 1 1 0;
+  min-height: 2.75rem; /* 44px touch target */
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--wildcat-white);
+  cursor: pointer;
+}
+
+.squad-button.active {
+  background: var(--wildcat-white);
+  color: var(--wildcat-green);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.squad-button:focus-visible {
+  outline: 2px solid var(--wildcat-white);
+  outline-offset: 2px;
 }
 
 /* ---------- Search ---------- */
@@ -272,7 +313,8 @@ main {
 /* ---------- Larger screens ---------- */
 
 @media (min-width: 40rem) {
-  .app-header {
+  .app-header,
+  .controls {
     padding-inline: 1.5rem;
   }
 

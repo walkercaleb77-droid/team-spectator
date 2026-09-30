@@ -39,7 +39,7 @@ jobs:
           persist-credentials: false
       - run: npm run build
         env:
-          ROSTER_CSV: ${{ vars.USE_REAL_ROSTER == 'true' && '.roster/roster.csv' || '' }}
+          ROSTER_DIR: ${{ vars.USE_REAL_ROSTER == 'true' && '.roster' || '' }}
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:

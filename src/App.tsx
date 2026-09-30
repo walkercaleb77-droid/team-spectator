@@ -3,15 +3,20 @@ import wildcatLogo from './assets/wildcat-logo.png'
 import { RosterList } from './components/RosterList'
 import { SearchBar } from './components/SearchBar'
 import { SortControl } from './components/SortControl'
+import { SquadToggle } from './components/SquadToggle'
 import { searchPlayers } from './lib/searchPlayers'
 import { sortPlayers } from './lib/sortPlayers'
 import { TEAM } from './team'
-import type { Player, SortDirection, SortKey } from './types'
+import { SQUAD_LABELS, type Roster, type SortDirection, type SortKey, type Squad } from './types'
 
-type RosterState = { status: 'loading' } | { status: 'error' } | { status: 'ready'; players: Player[] }
+type RosterState = { status: 'loading' } | { status: 'error' } | { status: 'ready'; roster: Roster }
+
+// The freshman roster gets its own URL (#freshman) so it can be shared or bookmarked.
+const FRESHMAN_HASH = '#freshman'
 
 function App() {
-  const [roster, setRoster] = useState<RosterState>({ status: 'loading' })
+  const [rosterState, setRosterState] = useState<RosterState>({ status: 'loading' })
+  const [squad, setSquad] = useState<Squad>(() => (window.location.hash === FRESHMAN_HASH ? 'freshman' : 'varsityJv'))
   const [query, setQuery] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('jersey')
   const [direction, setDirection] = useState<SortDirection>('asc')
@@ -21,13 +26,22 @@ function App() {
     fetch(`${import.meta.env.BASE_URL}roster.json`)
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        return response.json() as Promise<Player[]>
+        return response.json() as Promise<Roster>
       })
-      .then((players) => setRoster({ status: 'ready', players }))
-      .catch(() => setRoster({ status: 'error' }))
+      .then((roster) => setRosterState({ status: 'ready', roster }))
+      .catch(() => setRosterState({ status: 'error' }))
   }, [])
 
-  const allPlayers = useMemo(() => (roster.status === 'ready' ? roster.players : []), [roster])
+  const allPlayers = useMemo(
+    () => (rosterState.status === 'ready' ? rosterState.roster[squad] : []),
+    [rosterState, squad],
+  )
+
+  function handleSquadChange(next: Squad) {
+    setSquad(next)
+    const url = next === 'freshman' ? FRESHMAN_HASH : window.location.pathname + window.location.search
+    window.history.replaceState(null, '', url)
+  }
   const players = useMemo(
     () => sortPlayers(searchPlayers(allPlayers, query), sortKey, direction),
     [allPlayers, query, sortKey, direction],
@@ -57,16 +71,24 @@ function App() {
             <p className="brand-location">{TEAM.location}</p>
           </div>
         </div>
+      </header>
+      <div className="controls">
+        <SquadToggle squad={squad} onChange={handleSquadChange} />
         <SearchBar value={query} onChange={setQuery} />
         <SortControl sortKey={sortKey} direction={direction} onChange={handleSortChange} />
-      </header>
+      </div>
       <main>
-        {roster.status === 'loading' && <p className="status">Loading roster…</p>}
-        {roster.status === 'error' && <p className="status">Couldn't load the roster. Check your connection and refresh.</p>}
-        {roster.status === 'ready' && (
+        {rosterState.status === 'loading' && <p className="status">Loading roster…</p>}
+        {rosterState.status === 'error' && (
+          <p className="status">Couldn't load the roster. Check your connection and refresh.</p>
+        )}
+        {rosterState.status === 'ready' && allPlayers.length === 0 && (
+          <p className="status">The {SQUAD_LABELS[squad]} roster isn't available yet.</p>
+        )}
+        {rosterState.status === 'ready' && allPlayers.length > 0 && (
           <>
             <p className="result-count" aria-live="polite">
-              {players.length} of {allPlayers.length} players
+              {SQUAD_LABELS[squad]}: {players.length} of {allPlayers.length} players
             </p>
             <RosterList players={players} />
           </>

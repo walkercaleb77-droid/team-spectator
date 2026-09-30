@@ -21,6 +21,10 @@ A lightweight, mobile-first web app that shows a football team's roster with sor
 - Name: case-insensitive, partial match
 - Jersey number: exact or prefix match (typing "1" shows 1, 10 through 19, etc.)
 
+## Features (v2)
+
+- **Varsity/JV and Freshman rosters.** Varsity/JV shows by default; a toggle switches to Freshman (URL `#freshman`). Search and sort apply to whichever roster is shown. If no freshman CSV exists, the app says the roster isn't available yet.
+
 ## Data model
 
 ```json
@@ -53,7 +57,7 @@ The roster contains names, heights, and weights of **high school students (minor
 
 - **Do not commit the real DeSoto roster to any public repo.** Commit a **fake sample roster** for the repo, tests, and demos.
 - Load the real roster privately at deploy time (private file or build-time secret).
-- The real roster lives in the **private** repo `walkercaleb77-droid/team-spectator-data`, cloned next to this one (`../team-spectator-data/roster.csv`). `scripts/build-roster.ts` reads it when present and falls back to `data/roster.sample.csv`.
+- The real rosters live in the **private** repo `walkercaleb77-droid/team-spectator-data`, cloned next to this one: `../team-spectator-data/roster.csv` (Varsity/JV) and optional `roster-freshman.csv`. `scripts/build-roster.ts` reads that folder when present and falls back to the fake rosters in `data/sample/`.
 - Confirm with the school or athletic director before publishing, including use of the school name, logo, or mascot.
 - A password screen written in client-side JavaScript does **not** protect the data, since the JSON is still downloadable by anyone with the URL.
 
