@@ -1,11 +1,13 @@
 /**
  * Converts the roster CSV into public/roster.json for the app to load.
  *
- * Uses the first roster it finds:
+ * If ROSTER_CSV is set, uses that file and fails if it's missing (CI uses this
+ * when the real roster is switched on). Otherwise uses the first roster it finds:
  *   1. ../team-spectator-data/roster.csv  real roster, in a separate PRIVATE repo
  *   2. data/roster.csv                    real roster, local override (gitignored)
  *   3. data/roster.sample.csv             fake players, committed
- * CI never has the real roster, so the public site always gets sample data.
+ * CI only has the real roster when the USE_REAL_ROSTER repo variable is "true"
+ * (see .github/workflows/deploy.yml); otherwise the site gets sample data.
  *
  * CSV columns: jersey,first,last,grade,height,weightLb,positions
  *   height: feet-inches, e.g. 6-1
@@ -72,7 +74,9 @@ function parseRosterCsv(csv: string): Player[] {
     })
 }
 
-const source = SOURCES.find((path) => existsSync(path))
+const override = process.env.ROSTER_CSV
+if (override && !existsSync(override)) throw new Error(`ROSTER_CSV is set but ${override} does not exist`)
+const source = override || SOURCES.find((path) => existsSync(path))
 if (!source) throw new Error(`No roster found. Looked for: ${SOURCES.join(', ')}`)
 const players = parseRosterCsv(readFileSync(source, 'utf8'))
 writeFileSync(OUTPUT, JSON.stringify(players, null, 2) + '\n')
