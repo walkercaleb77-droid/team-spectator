@@ -53,6 +53,7 @@ The roster contains names, heights, and weights of **high school students (minor
 
 - **Do not commit the real DeSoto roster to any public repo.** Commit a **fake sample roster** for the repo, tests, and demos.
 - Load the real roster privately at deploy time (private file or build-time secret).
+- The real roster lives in the **private** repo `walkercaleb77-droid/team-spectator-data`, cloned next to this one (`../team-spectator-data/roster.csv`). `scripts/build-roster.ts` reads it when present and falls back to `data/roster.sample.csv`.
 - Confirm with the school or athletic director before publishing, including use of the school name, logo, or mascot.
 - A password screen written in client-side JavaScript does **not** protect the data, since the JSON is still downloadable by anyone with the URL.
 

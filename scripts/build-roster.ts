@@ -1,9 +1,11 @@
 /**
  * Converts the roster CSV into public/roster.json for the app to load.
  *
- * Uses data/roster.csv (the real roster, gitignored) when it exists,
- * otherwise data/roster.sample.csv (fake players, committed). CI never has
- * the real file, so the public site always gets sample data.
+ * Uses the first roster it finds:
+ *   1. ../team-spectator-data/roster.csv  real roster, in a separate PRIVATE repo
+ *   2. data/roster.csv                    real roster, local override (gitignored)
+ *   3. data/roster.sample.csv             fake players, committed
+ * CI never has the real roster, so the public site always gets sample data.
  *
  * CSV columns: jersey,first,last,grade,height,weightLb,positions
  *   height: feet-inches, e.g. 6-1
@@ -15,8 +17,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { POSITIONS, type Player, type Position } from '../src/types.ts'
 
-const REAL = 'data/roster.csv'
-const SAMPLE = 'data/roster.sample.csv'
+const SOURCES = ['../team-spectator-data/roster.csv', 'data/roster.csv', 'data/roster.sample.csv']
 const OUTPUT = 'public/roster.json'
 const COLUMNS = ['jersey', 'first', 'last', 'grade', 'height', 'weightLb', 'positions']
 
@@ -71,7 +72,8 @@ function parseRosterCsv(csv: string): Player[] {
     })
 }
 
-const source = existsSync(REAL) ? REAL : SAMPLE
+const source = SOURCES.find((path) => existsSync(path))
+if (!source) throw new Error(`No roster found. Looked for: ${SOURCES.join(', ')}`)
 const players = parseRosterCsv(readFileSync(source, 'utf8'))
 writeFileSync(OUTPUT, JSON.stringify(players, null, 2) + '\n')
 console.log(`build-roster: ${players.length} players from ${source} -> ${OUTPUT}`)
