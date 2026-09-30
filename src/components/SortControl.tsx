@@ -3,7 +3,9 @@ import type { SortDirection, SortKey } from '../types'
 const SORT_OPTIONS: { key: SortKey; label: string }[] = [
   { key: 'jersey', label: '#' },
   { key: 'name', label: 'Name' },
-  { key: 'position', label: 'Position' },
+  { key: 'position', label: 'Pos' },
+  { key: 'height', label: 'Ht' },
+  { key: 'weight', label: 'Wt' },
 ]
 
 interface SortControlProps {

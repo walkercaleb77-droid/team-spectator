@@ -4,12 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "npm run roster",
     "dev": "vite",
+    "predev:mobile": "npm run roster",
     "dev:mobile": "vite --host",
+    "prebuild": "npm run roster",
     "build": "tsc && vite build",
     "lint": "oxlint",
     "typecheck": "tsc",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "roster": "node scripts/build-roster.ts"
   },
   "dependencies": {
     "react": "^19.2.8",

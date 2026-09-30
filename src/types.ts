@@ -4,11 +4,14 @@ export type Position = (typeof POSITIONS)[number]
 
 export interface Player {
   jersey: number
-  name: string
+  firstName: string
+  lastName: string
+  grade: number
   heightIn: number
   weightLb: number
-  position: Position
+  /** Primary position first, e.g. ["RB", "DB"] */
+  positions: Position[]
 }
 
-export type SortKey = 'jersey' | 'name' | 'position'
+export type SortKey = 'jersey' | 'name' | 'position' | 'height' | 'weight'
 export type SortDirection = 'asc' | 'desc'

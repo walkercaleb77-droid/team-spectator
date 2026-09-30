@@ -1,7 +1,8 @@
 :root {
-  /* De Soto Wildcats: green, white, black */
-  --wildcat-green: #0b5d2e;
-  --wildcat-green-dark: #07401f;
+  /* De Soto Wildcats: green, white, black (green and silver sampled from the logo) */
+  --wildcat-green: #125d16;
+  --wildcat-green-dark: #0c410f;
+  --wildcat-silver: #a8c0ca;
   --wildcat-black: #111111;
   --wildcat-white: #ffffff;
 
@@ -83,6 +84,33 @@ body {
   box-shadow: inset 0 -3px 0 var(--wildcat-white);
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+/* White medallion so the green logo stands out on the green header */
+.brand-logo {
+  flex: none;
+  width: 4rem;
+  height: 4rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--wildcat-white);
+  box-shadow: 0 0 0 3px var(--wildcat-black);
+}
+
+.brand-logo img {
+  width: 82%;
+  height: auto;
+}
+
+.brand-text {
+  min-width: 0;
+}
+
 .brand p {
   margin: 0;
   font-size: 0.75rem;
@@ -133,11 +161,12 @@ main {
 
 .sort-control {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.375rem;
 }
 
 .sort-button {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   min-height: 2.75rem; /* 44px touch target */
   font: inherit;
   font-size: 0.9rem;
@@ -234,7 +263,8 @@ main {
   letter-spacing: 0.05em;
 }
 
-.empty {
+.empty,
+.status {
   text-align: center;
   padding: 2rem 0;
 }

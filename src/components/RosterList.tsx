@@ -18,12 +18,14 @@ export function RosterList({ players }: RosterListProps) {
             {player.jersey}
           </span>
           <span className="player-info">
-            <span className="player-name">{player.name}</span>
+            <span className="player-name">
+              {player.firstName} {player.lastName}
+            </span>
             <span className="player-stats">
-              {formatHeight(player.heightIn)} · {player.weightLb} lb
+              {formatHeight(player.heightIn)} · {player.weightLb} lb · Gr {player.grade}
             </span>
           </span>
-          <span className="position">{player.position}</span>
+          <span className="position">{player.positions.join('/')}</span>
         </li>
       ))}
     </ul>
